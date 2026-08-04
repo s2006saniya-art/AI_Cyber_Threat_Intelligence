@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -67,6 +68,24 @@ def normalize_labels(df):
 
     return df
 
+def remove_infinite_values(df):
+    """
+    Replace infinite values with NaN.
+    """
+
+    print("\nReplacing infinite values...")
+
+    numeric_columns = df.select_dtypes(include=[np.number]).columns
+
+    df[numeric_columns] = df[numeric_columns].replace(
+        [np.inf, -np.inf],
+        np.nan
+    )
+
+    print("Infinite values replaced successfully.")
+
+    return df
+
 def remove_missing_values(df):
     """
     Remove rows containing missing values.
@@ -109,6 +128,23 @@ def remove_duplicates(df):
     print(f"Rows Removed: {rows_before - rows_after}")
 
     print("Duplicate rows removed successfully.")
+
+    return df
+
+def remove_negative_flow_duration(df):
+    """
+    Remove rows where Flow Duration is negative.
+    """
+
+    print("\nChecking negative Flow Duration values...")
+
+    negative_rows = (df["Flow Duration"] < 0).sum()
+
+    print(f"Negative Rows Found: {negative_rows}")
+
+    df = df[df["Flow Duration"] >= 0]
+
+    print("Negative Flow Duration rows removed successfully.")
 
     return df
 
@@ -163,9 +199,13 @@ def main():
 
     combined_df = normalize_labels(combined_df)
 
+    combined_df = remove_infinite_values(combined_df)
+
     combined_df = remove_missing_values(combined_df)
 
     combined_df = remove_duplicates(combined_df)
+
+    combined_df = remove_negative_flow_duration(combined_df)
 
     validate_dataset(combined_df)
 
