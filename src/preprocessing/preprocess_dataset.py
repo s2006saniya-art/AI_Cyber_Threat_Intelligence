@@ -56,13 +56,17 @@ def normalize_labels(df):
     print("\nNormalizing attack labels...")
 
     df["Label"] = (
-        df["Label"]
-        .str.strip()
-        .str.replace("–", "-", regex=False)
-        .str.replace("Web Attack - Brute Force", "Web_Attack_Brute_Force", regex=False)
-        .str.replace("Web Attack - XSS", "Web_Attack_XSS", regex=False)
-        .str.replace("Web Attack - Sql Injection", "Web_Attack_SQL_Injection", regex=False)
-    )
+    df["Label"]
+    .str.strip()
+    .str.replace("–", "-", regex=False)
+    .str.replace("�", "-", regex=False)
+    .str.replace("Web Attack - Sql Injection", "Web Attack - SQL Injection", regex=False)
+    .str.replace("Web Attack  -", "Web Attack -", regex=False)
+    .str.replace("Web Attack - Brute Force", "Web Attack - Brute Force", regex=False)
+    .str.replace("Web Attack - XSS", "Web Attack - XSS", regex=False)
+    .str.replace("Web Attack - Sql Injection", "Web Attack - SQL Injection", regex=False)
+)
+    print(df["Label"].unique())
 
     print("Attack labels normalized successfully.")
 

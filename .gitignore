@@ -15,3 +15,5 @@ dataset/processed/
 
 # VS Code
 .vscode/
+
+results/

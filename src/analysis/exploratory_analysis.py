@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from pathlib import Path
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -10,6 +13,10 @@ PROCESSED_DATASET = (
     / "processed"
     / "processed_dataset.csv"
 )
+
+RESULTS_FOLDER = PROJECT_ROOT / "results"
+FIGURES_FOLDER = RESULTS_FOLDER / "figures"
+STATISTICS_FOLDER = RESULTS_FOLDER / "statistics"
 
 def load_dataset():
     print("\nLoading processed dataset...")
@@ -92,6 +99,50 @@ def check_negative_values(df):
             ].head()
         )
 
+def label_distribution(df):
+
+    print("\n" + "=" * 60)
+    print("LABEL DISTRIBUTION")
+    print("=" * 60)
+
+    label_counts = df["Label"].value_counts()
+    print(label_counts)
+
+    plt.figure(figsize=(18 ,8))
+
+    ax = sns.barplot(
+    x=label_counts.index,
+    y=label_counts.values,
+    hue=label_counts.index,
+    legend=False
+)
+    for i, value in enumerate(label_counts.values):
+        ax.text(
+        i,
+        value,
+        f"{value:,}",
+        ha="center",
+        va="bottom",
+        fontsize=8,
+        rotation=90
+    )
+
+    plt.xticks(rotation=45, ha="right")
+    plt.title("Distribution of Attack Classes in CICIDS2017 Dataset", fontsize=16, fontweight="bold")
+    plt.xlabel("Attack Classes", fontsize=12)
+    plt.ylabel("Number of Network Flows (Log Scale)", fontsize=12)
+    
+    plt.yscale("log")
+
+    plt.tight_layout()
+
+    output_path = FIGURES_FOLDER / "label_distribution.png"
+
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+
+    print(f"\nGraph Saved at: \n{output_path}")
+
 def main():
 
     df = load_dataset()
@@ -105,6 +156,8 @@ def main():
     check_infinite_values(df)
 
     check_negative_values(df)
+
+    label_distribution(df)
 
 if __name__ == "__main__":
     main()
