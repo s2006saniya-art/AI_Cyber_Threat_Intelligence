@@ -9,6 +9,10 @@ venv/
 # Dataset
 dataset/raw/
 dataset/processed/
+dataset/split/
+
+# Trained Models
+models/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -16,4 +20,5 @@ dataset/processed/
 # VS Code
 .vscode/
 
+# Results and Generated Files
 results/

@@ -21,7 +21,7 @@ STATISTICS_FOLDER = RESULTS_FOLDER / "statistics"
 def load_dataset():
     print("\nLoading processed dataset...")
 
-    df = pd.read_csv(PROCESSED_DATASET)
+    df = pd.read_csv(PROCESSED_DATASET)  
 
     print("\nDataset loaded successfully!")
     
@@ -143,6 +143,29 @@ def label_distribution(df):
 
     print(f"\nGraph Saved at: \n{output_path}")
 
+def correlation_heatmap(df):
+
+    print("\n" + "=" * 60)
+    print("CORRELATION HEATMAP")
+    print("=" * 60)
+
+    numeric_df = df.select_dtypes(include=[np.number])
+    correlation_matrix = numeric_df.corr()
+
+    plt.figure(figsize=(8, 14))
+
+    sns.heatmap(correlation_matrix, cmap = "coolwarm", center = 0)
+    plt.title("Correlation Heatmap")
+
+    plt.tight_layout()
+
+    output_path = FIGURES_FOLDER/ "correlation_heatmap.png"
+
+    plt.savefig(output_path, dpi = 300)
+    plt.close()
+
+    print("\nHeatmap saved at:\n{output_path}")
+
 def main():
 
     df = load_dataset()
@@ -158,6 +181,8 @@ def main():
     check_negative_values(df)
 
     label_distribution(df)
+
+    correlation_heatmap(df)
 
 if __name__ == "__main__":
     main()
