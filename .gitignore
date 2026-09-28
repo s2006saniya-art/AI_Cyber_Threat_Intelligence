@@ -22,3 +22,7 @@ models/
 
 # Results and Generated Files
 results/
+
+# SQLite Database
+database/
+*.db
